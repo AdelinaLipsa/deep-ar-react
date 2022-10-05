@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
+import './iframe.styles.css';
 
 const CustomIframe = ({
                         children,
@@ -11,7 +12,7 @@ const CustomIframe = ({
     contentRef?.contentWindow?.document?.body
 
   return (
-    <iframe {...props} ref={setContentRef} title='title'>
+    <iframe {...props} ref={setContentRef} title='title' className='custom-iframe'>
       {mountNode && createPortal(children, mountNode)}
     </iframe>
   )

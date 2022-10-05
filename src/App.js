@@ -1,61 +1,39 @@
-import './App.css';
-import { Component } from "react";
-import Button from "./button/button";
-import CustomIframe from './iframe/customIframe';
-import Modal from "./modal/modal";
+import './index.css';
+import Button from "./components/button/button";
+import CustomIframe from './components/iframe/customIframe';
+import Modal from "./components/modal/modal";
+import { useState, useEffect } from "react";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  let modal, randomProduct;
 
-    this.state = {
-      products: [],
-      showFiltersModal: false
+  const [products, setProducts] = useState([]);
+  const [showFiltersModal, setFiltersModal] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      fetch('https://cors-anywhere.herokuapp.com/https://staging1.farmec.ro/rest/V1/farmec/deeparProducts/')
+        .then(response => response.json())
+        .then((productsJson) => setProducts(productsJson));
     };
+  }, []);
 
-    this.handleShowModal = this.handleShowModal.bind(this);
+  if (products.length) {
+    randomProduct = Object.values(products[0])[1];
   }
 
-  handleShowModal() {
-    this.setState({ showFiltersModal: true });
+  if (showFiltersModal) {
+    modal = <Modal/>;
   }
 
-  async componentDidMount() {
-    await fetch('https://cors-anywhere.herokuapp.com/https://staging1.farmec.ro/rest/V1/farmec/deeparProducts/')
-      .then(response => response.json())
-      .then((productsJson) => {
-          this.setState(
-            () => {
-              return { products: productsJson };
-            })
-        }
-      );
-  }
+  console.log(showFiltersModal);
 
-  render() {
-    let showFiltersModal = this.state.showFiltersModal;
-    let products = this.state.products;
-    let randomProduct = [];
-    let modal;
-
-    if (products.length) {
-      randomProduct = Object.values(products[0])[1];
-    }
-
-    if (showFiltersModal) {
-      console.log('true');
-      modal = <Modal product={randomProduct}/>;
-    } else {
-      console.log('false');
-    }
-
-    return (
-      <CustomIframe>
-        <Button onClick={() => this.handleShowModal()}/>
-        {modal}
-      </CustomIframe>
-    );
-  }
+  return (
+    <CustomIframe className='custom-iframe'>
+      <Button handleModal={() => setFiltersModal(true)}/>
+      {modal}
+    </CustomIframe>
+  );
 }
 
 export default App;
