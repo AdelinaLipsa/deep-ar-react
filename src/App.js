@@ -21,7 +21,7 @@ const App = () => {
 
   /*@TODO:remove this in production and give actual product in current shown page*/
   if (products.length) {
-    randomProduct = Object.values(products[0])[1];
+    randomProduct = Object.values(products[0])[0];
   }
 
   if (showFiltersModal) {

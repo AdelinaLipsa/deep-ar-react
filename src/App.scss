@@ -16,7 +16,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   gap: 0.4rem;
-  width: 70%;
+  width: 50%;
   padding: 1.3rem;
   min-height: 250px;
   z-index: 2;
@@ -95,4 +95,26 @@ button {
   display: none;
 }
 
-.colors-wrapper {}
+.colors-wrapper {
+  display: flex;
+
+  .colors {
+  }
+}
+
+.deepar {
+  position: relative;
+}
+
+.fullscreen {
+  position:absolute;
+  display: flex;
+  justify-content: flex-end;
+  background:transparent;
+  margin-top: -50px;
+  fill:white;
+  
+  &:hover{
+    cursor: pointer;
+  }
+}
