@@ -11,9 +11,8 @@ const Modal = (props) => {
   const overlay = document.querySelector(".overlay");
 
   const handleModal = () => {
-    // overlay.classList.remove("hidden");
-    // deepAR.stopVideo();
-    return props.hideModal;
+    overlay.classList.remove("hidden");
+    return props.hideModal();
   };
 
   // DeepAR API
@@ -26,11 +25,9 @@ const Modal = (props) => {
         segmentationInfoZip: 'segmentation.zip',
         deeparWasmPath: deeparWasm,
         canvas: document.querySelector('#deepar-canvas'),
-        numberOfFaces: 1, // how many faces we want to track min 1, max 4
         callbacks: {
           onInitialize: () => {
             deepAR.startVideo(true);
-            deepAR.setCanvasSize(900, 600);
           }
         }
       })
@@ -44,7 +41,6 @@ const Modal = (props) => {
     // start video immediately after the initalization, mirror = true
     deepAR.startVideo(true);
     deepAR.switchEffect(0, 'slot', '/models/' + filter);
-    deepAR.setCanvasSize(900, 600);
   };
 
   // normal on context menu event prevent default refresh
@@ -52,11 +48,15 @@ const Modal = (props) => {
     return e.preventDefault();
   };
 
+  const handleFilterClick = (selectedFilter) => {
+    console.log(selectedFilter.target.value);
+  }
+
   // model can be found at JSON.stringify(color.filterData[0]['Filter Binary Path'])
   return (
     <section className={"modal"}>
       <div className={"btn-wrapper"}>
-        <button className={"btn-close"} onClick={() => handleModal}>⨉</button>
+        <button className={"btn-close"} onClick={handleModal}>⨉</button>
       </div>
       <div>
         <h3>Incearca produsul selectand una din culori</h3>
@@ -65,9 +65,12 @@ const Modal = (props) => {
           <canvas className="deepar"
                   id="deepar-canvas"
                   onContextMenu={(e) => handleMouseEvent(e)}
-                  style={fullScreen ? { width: '100%', height: '100%' } : { width: 600, height: 600 }}
+                  style={ fullScreen
+                    ? { width: window.innerWidth, height: window.innerHeight }
+                    : { width: '900px', height: '600px'
+                  }}
           ></canvas>
-          <button className={"fullscreen"} onClick={() => setFullScreen(true)}>
+          <button className={"fullscreen"} onClick={() => fullScreen ? setFullScreen(false) : setFullScreen(true)}>
             <svg height="50" viewBox="0 0 50 50" width="50" xmlns="http://www.w3.org/2000/svg">
               <path d="M0 0h48v48h-48z" fill="none"/>
               <path
@@ -77,9 +80,14 @@ const Modal = (props) => {
         </div>
         <div className={"colors-wrapper"}>
           {colors.map((color, index) => {
-            return <div key={index} onClick={() => alert(index)} className={"colors"}>
-              <img src={props.product.images[0].image} alt="description" width={100} height={100}/>
-            </div>;
+            return <div key={index} className={"colors"}>
+              <label
+                className="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-red-700">
+                <input type="radio" name="color-choice" value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"
+                       onChange={handleFilterClick}/>
+                <img src={props.product.images[0].image} alt={JSON.stringify(color.filterData[0])} className="w-10 h-10" width={100} height={100}/>
+              </label>
+            </div>
           })}
         </div>
       </div>
