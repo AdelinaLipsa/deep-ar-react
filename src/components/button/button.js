@@ -1,14 +1,17 @@
 const Button = (props) => {
+
+  const overlay = document.querySelector(".overlay");
+
+  const handleModal = () => {
+    overlay.classList.add("hidden");
+    return props.showModal;
+  };
+
   return (
-    <>
-      {/*If you want to see all the products on page*/}
-      {/*<ul>*/}
-      {/*  {this.props.products.map((item, index) => {*/}
-      {/*    return <li key={index}>{JSON.stringify(item)}</li>*/}
-      {/*  })}*/}
-      {/*</ul>*/}
-      <button onClick={props.handleModal} id='btn'>Incearca o culoare!</button>
-    </>
+      <div>
+        <input type="button" value="Incearca o culoare!" onClick={handleModal()} className={"btn btn-open"}/>
+        <div className={"overlay hidden"}></div>
+      </div>
   );
 }
 

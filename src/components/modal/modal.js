@@ -1,20 +1,27 @@
-const Modal = ({ product  }) => (
-    <section className="modal">
-      <div className="flex">
-        <img src="https://avatars.githubusercontent.com/u/62628408?s=96&v=4" width="50px" height="50px" alt="user"/>
-        <button className="btn-close">⨉</button>
-      </div>
-      <div>
-        <h3>Stay in touch</h3>
-        <p>
-          This is a dummy newsletter form so don't bother trying to test it. Not
-          that I expect you to, anyways. :)
-        </p>
-      </div>
+const Modal = (props) => {
+  const colors = props.product.Variations;
+  const overlay = document.querySelector(".overlay");
 
-      <input type="email" id="email" placeholder="brendaneich@js.com"/>
-      <button className="btn">Do Something</button>
-    </section>
-);
+  const handleModal = () => {
+    overlay.classList.remove("hidden");
+    return props.hideModal;
+  };
+
+  return (
+      <section className={"modal"}>
+        <div className={"btn-wrapper"}>
+          <button className={"btn-close"} onClick={handleModal()}>⨉</button>
+        </div>
+        <div>
+          <h3>Incearca produsul selectand una din culori</h3>
+          <div className={"colors-wrapper"}>
+            {colors.map((color, index) => {
+              return <div key={index} onClick={() => alert(index)}>{JSON.stringify(color.filterData)}</div>;
+            })}
+          </div>
+        </div>
+      </section>
+    );
+};
 
 export default Modal;
