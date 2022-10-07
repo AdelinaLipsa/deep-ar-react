@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { DeepAR } from 'deepar';
-import deeparWasm from 'deepar/wasm/deepar.wasm';
+import deeparWasm from '../../deepar/deepar.wasm';
+import segmentationModel from '../../deepar/segmentation-160x160-opt.bin';
 
 const Modal = (props) => {
   let deepAR;
@@ -10,21 +11,20 @@ const Modal = (props) => {
   // modal css interaction
   const overlay = document.querySelector(".overlay");
 
-  const handleModal = () => {
-    overlay.classList.remove("hidden");
-    return props.hideModal();
-  };
-
   // DeepAR API
   /*@TODO:change license key*/
   useEffect(() => {
+    const canvas = document.getElementById('deepar-canvas');
+
     return () => {
       deepAR = new DeepAR({
         licenseKey: '6fda241c565744899d3ea574dc08a18ce3860d219aeb6de4b2d23437d7b6dcfcd79941dffe0e57f0',
         libPath: './lib',
-        segmentationInfoZip: 'segmentation.zip',
         deeparWasmPath: deeparWasm,
-        canvas: document.querySelector('#deepar-canvas'),
+        canvas: canvas,
+        segmentationConfig: {
+          modelPath: segmentationModel
+        },
         callbacks: {
           onInitialize: () => {
             deepAR.startVideo(true);
@@ -32,27 +32,33 @@ const Modal = (props) => {
         }
       })
 
-      deepAR.downloadFaceTrackingModel('models/models-68-extreme.bin');
+      deepAR.downloadFaceTrackingModel('../../deepar/models-68-extreme.bin');
     };
   }, []);
 
-  // every time you click on a filter, it will call this function
-  const handleDeepAr = (filter) => {
-    // start video immediately after the initalization, mirror = true
-    deepAR.startVideo(true);
-    deepAR.switchEffect(0, 'slot', '/models/' + filter);
+  const handleModal = () => {
+    overlay.classList.remove("hidden");
+    if (deepAR)
+      deepAR.stopVideo();
+
+    return props.hideModal();
   };
 
-  // normal on context menu event prevent default refresh
+  // every time you click on a filter, it will call this function
+  const handleFilterClick = (selectedFilter) => {
+    let filter = selectedFilter.target.value.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
+
+    if (!filter) {
+      return;
+    }
+
+    deepAR.switchEffect(0, 'slot', '/textures/' + filter);
+  };
+
   const handleMouseEvent = (e) => {
     return e.preventDefault();
   };
 
-  const handleFilterClick = (selectedFilter) => {
-    console.log(selectedFilter.target.value);
-  }
-
-  // model can be found at JSON.stringify(color.filterData[0]['Filter Binary Path'])
   return (
     <section className={"modal"}>
       <div className={"btn-wrapper"}>
@@ -61,14 +67,12 @@ const Modal = (props) => {
       <div>
         <h3>Incearca produsul selectand una din culori</h3>
         <br/>
-        <div>
+        <div className={"canvas-wrapper"}>
           <canvas className="deepar"
                   id="deepar-canvas"
                   onContextMenu={(e) => handleMouseEvent(e)}
-                  style={ fullScreen
-                    ? { width: window.innerWidth, height: window.innerHeight }
-                    : { width: '900px', height: '600px'
-                  }}
+                  width={fullScreen ? window.innerWidth + 'px' : '900px'}
+                  height={fullScreen ? window.innerHeight + 'px' : '600px'}
           ></canvas>
           <button className={"fullscreen"} onClick={() => fullScreen ? setFullScreen(false) : setFullScreen(true)}>
             <svg height="50" viewBox="0 0 50 50" width="50" xmlns="http://www.w3.org/2000/svg">
@@ -82,10 +86,12 @@ const Modal = (props) => {
           {colors.map((color, index) => {
             return <div key={index} className={"colors"}>
               <label
-                className="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-red-700">
-                <input type="radio" name="color-choice" value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"
+                className="radio-button-label">
+                <input type="radio" name="color-choice"
+                       value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"
                        onChange={handleFilterClick}/>
-                <img src={props.product.images[0].image} alt={JSON.stringify(color.filterData[0])} className="w-10 h-10" width={100} height={100}/>
+                <img src={props.product.images[0].image} alt={JSON.stringify(color.filterData[0])} className="w-10 h-10"
+                     width={100} height={100}/>
               </label>
             </div>
           })}

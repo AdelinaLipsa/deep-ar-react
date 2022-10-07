@@ -401,6 +401,13 @@ module.exports = function (webpackEnv) {
                 and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
               },
             },
+            {
+              test: /\.(wasm)|(bin)|(obj)$/i,
+              include: [
+                path.resolve(__dirname, 'node_modules/deepar/'),
+              ],
+              type: 'asset/resource',
+            },
             // Process application JS with Babel.
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
