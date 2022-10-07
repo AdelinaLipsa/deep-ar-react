@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { DeepAR } from 'deepar';
+/*@TODO: replace paths with server local path*/
 import deeparWasm from '../../deepar/deepar.wasm';
 import segmentationModel from '../../deepar/segmentation-160x160-opt.bin';
 
 const Modal = (props) => {
-  let deepAR;
+  let deepAR = null;
   const [fullScreen, setFullScreen] = useState(false);
   // product color variations
   const colors = props.product.Variations;
@@ -32,9 +33,10 @@ const Modal = (props) => {
         }
       })
 
+      /*@TODO: replace paths with server local path*/
       deepAR.downloadFaceTrackingModel('../../deepar/models-68-extreme.bin');
     };
-  }, []);
+  });
 
   const handleModal = () => {
     overlay.classList.remove("hidden");
@@ -52,7 +54,9 @@ const Modal = (props) => {
       return;
     }
 
-    deepAR.switchEffect(0, 'slot', '/textures/' + filter);
+    /*@TODO: replace paths with server local path*/
+    /*@ERROR: deepAR not accesible from here??*/
+    deepAR.switchEffect(0, 'slot', '/textures/' + filter + '.bin');
   };
 
   const handleMouseEvent = (e) => {

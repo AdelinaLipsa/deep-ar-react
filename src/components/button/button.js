@@ -3,7 +3,8 @@ const Button = (props) => {
   const overlay = document.querySelector(".overlay");
 
   const handleModal = () => {
-    // overlay.classList.add("hidden");
+    if(overlay)
+      overlay.classList.add("hidden");
     return props.showModal;
   };
 
