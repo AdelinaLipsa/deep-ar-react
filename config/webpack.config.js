@@ -347,6 +347,11 @@ module.exports = function (webpackEnv) {
           loader: require.resolve('source-map-loader'),
         },
         {
+          test: /\.(wasm)|(bin)|(obj)$/i,
+          include: [path.resolve(__dirname, 'node_modules/deepar/')],
+          type: 'asset/resource',
+        },
+        {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
           // back to the "file" loader at the end of the loader list.

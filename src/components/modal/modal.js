@@ -36,7 +36,7 @@ const Modal = (props) => {
       /*@TODO: replace paths with server local path*/
       deepAR.downloadFaceTrackingModel('../../deepar/models-68-extreme.bin');
     };
-  });
+  }, [deepAR]);
 
   const handleModal = () => {
     overlay.classList.remove("hidden");
@@ -50,13 +50,14 @@ const Modal = (props) => {
   const handleFilterClick = (selectedFilter) => {
     let filter = selectedFilter.target.value.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
 
+    console.log(filter);
     if (!filter) {
       return;
     }
 
     /*@TODO: replace paths with server local path*/
     /*@ERROR: deepAR not accesible from here??*/
-    deepAR.switchEffect(0, 'slot', '/textures/' + filter + '.bin');
+    deepAR.switchEffect(0, 'slot', '../../deepar/textures/' + filter + '.bin');
   };
 
   const handleMouseEvent = (e) => {
@@ -94,8 +95,7 @@ const Modal = (props) => {
                 <input type="radio" name="color-choice"
                        value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"
                        onChange={handleFilterClick}/>
-                <img src={props.product.images[0].image} alt={JSON.stringify(color.filterData[0])} className="w-10 h-10"
-                     width={100} height={100}/>
+                <div style={{backgroundColor : color.filterData[0]['Hex Color'], width: '50px', height: '50px'}} onClick={handleFilterClick}/>
               </label>
             </div>
           })}
