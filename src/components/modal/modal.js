@@ -3,7 +3,9 @@ import { DeepAR } from 'deepar';
 import deeparWasm from 'deepar/wasm/deepar.wasm';
 import segmentationModel from 'deepar/models/segmentation/segmentation-160x160-opt.bin';
 import models from 'deepar/models/face/models-68-extreme.bin';
-import example from '../../deepar/textures/2568.bin';
+import example from '../../deepar/textures/2569.bin';
+import example2 from '../../deepar/textures/2570.bin';
+import example3 from '../../deepar/textures/2568.bin';
 
 const Modal = (props) => {
   const [deepAR, setDeepAR] = useState(null);
@@ -54,8 +56,9 @@ const Modal = (props) => {
   const handleFilterClick = (selectedFilter) => {
     let filter = selectedFilter.target.value;
 
-    /*@TODO: change model path to filter URL when in production, I used it like this because of CORS issues with local testing */
-    deepAR.switchEffect(0, 'slot', example);
+    let filterName = filter.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
+
+    return deepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
   };
 
   return (
@@ -89,7 +92,12 @@ const Modal = (props) => {
                 <input type="radio" name="color-choice"
                        value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"
                        onChange={handleFilterClick}/>
-                <div style={{backgroundColor : color.filterData[0]['Hex Color'], width: '50px', height: '50px'}}/>
+                <div style={{
+                  backgroundColor: color.filterData[0]['Hex Color'],
+                  width: '50px',
+                  height: '50px',
+                  cursor: "pointer"
+                }}/>
               </label>
             </div>
           })}
