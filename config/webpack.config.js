@@ -339,17 +339,17 @@ module.exports = function (webpackEnv) {
     module: {
       strictExportPresence: true,
       rules: [
+        {
+          test: /\.(wasm)|(bin)|(obj)$/i,
+          include: [path.resolve(__dirname, 'node_modules/deepar/')],
+          type: 'asset/resource',
+        },
         // Handle node_modules packages that contain sourcemaps
         shouldUseSourceMap && {
           enforce: 'pre',
           exclude: /@babel(?:\/|\\{1,2})runtime/,
           test: /\.(js|mjs|jsx|ts|tsx|css)$/,
           loader: require.resolve('source-map-loader'),
-        },
-        {
-          test: /\.(wasm)|(bin)|(obj)$/i,
-          include: [path.resolve(__dirname, 'node_modules/deepar/')],
-          type: 'asset/resource',
         },
         {
           // "oneOf" will traverse all following loaders until one will

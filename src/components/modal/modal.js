@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { DeepAR } from 'deepar';
-/*@TODO: replace paths with server local path*/
-import deeparWasm from '../../deepar/deepar.wasm';
-import segmentationModel from '../../deepar/segmentation-160x160-opt.bin';
+import deeparWasm from 'deepar/wasm/deepar.wasm';
+import segmentationModel from 'deepar/models/segmentation/segmentation-160x160-opt.bin';
+import models from 'deepar/models/face/models-68-extreme.bin';
+import example from '../../deepar/textures/2568.bin';
 
 const Modal = (props) => {
   const [deepAR, setDeepAR] = useState(null);
@@ -19,7 +20,7 @@ const Modal = (props) => {
     return () => {
       let initializedDeepAR = new DeepAR({
         licenseKey: '6fda241c565744899d3ea574dc08a18ce3860d219aeb6de4b2d23437d7b6dcfcd79941dffe0e57f0',
-        libPath: './lib',
+        libPath: DeepAR,
         deeparWasmPath: deeparWasm,
         canvas: canvas,
         segmentationConfig: {
@@ -34,7 +35,7 @@ const Modal = (props) => {
       })
 
       /*@TODO: replace paths with server local path*/
-      initializedDeepAR.downloadFaceTrackingModel('../../deepar/models-68-extreme.bin');
+      initializedDeepAR.downloadFaceTrackingModel(models);
     };
   }, []);
 
@@ -53,9 +54,8 @@ const Modal = (props) => {
   const handleFilterClick = (selectedFilter) => {
     let filter = selectedFilter.target.value;
 
-    /*@TODO: replace paths with server local path*/
-    // deepAR.switchEffect(0, 'slot', '../../deepar/textures/' + filter.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0] + '.bin');
-    deepAR.switchEffect(0, 'slot', filter);
+    /*@TODO: change model path to filter URL when in production, I used it like this because of CORS issues with local testing */
+    deepAR.switchEffect(0, 'slot', example);
   };
 
   return (
@@ -89,7 +89,7 @@ const Modal = (props) => {
                 <input type="radio" name="color-choice"
                        value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"
                        onChange={handleFilterClick}/>
-                <div style={{backgroundColor : color.filterData[0]['Hex Color'], width: '50px', height: '50px'}} onClick={handleFilterClick}/>
+                <div style={{backgroundColor : color.filterData[0]['Hex Color'], width: '50px', height: '50px'}}/>
               </label>
             </div>
           })}
