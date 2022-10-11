@@ -3,9 +3,6 @@ import { DeepAR } from 'deepar';
 import deeparWasm from 'deepar/wasm/deepar.wasm';
 import segmentationModel from 'deepar/models/segmentation/segmentation-160x160-opt.bin';
 import models from 'deepar/models/face/models-68-extreme.bin';
-import example from '../../deepar/textures/2569.bin';
-import example2 from '../../deepar/textures/2570.bin';
-import example3 from '../../deepar/textures/2568.bin';
 
 const Modal = (props) => {
   const [deepAR, setDeepAR] = useState(null);
@@ -30,8 +27,11 @@ const Modal = (props) => {
         },
         callbacks: {
           onInitialize: () => {
+            // let filterName = colors[0].filterData[0]['Filter Binary Path'].match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
+
             setDeepAR(initializedDeepAR);
             initializedDeepAR.startVideo(true);
+            // initializedDeepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
           }
         }
       })
@@ -67,7 +67,7 @@ const Modal = (props) => {
         <button className={"btn-close"} onClick={handleModal}>⨉</button>
       </div>
       <div>
-        <h3>Incearca produsul selectand una din culori</h3>
+        <h3>Incearcă produsul selectând una din culorile de mai jos</h3>
         <br/>
         <div className={"canvas-wrapper"}>
           <canvas className="deepar"

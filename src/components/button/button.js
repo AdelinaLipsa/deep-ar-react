@@ -10,7 +10,7 @@ const Button = (props) => {
 
   return (
       <div>
-        <input type="button" value="Incearca o culoare!" onClick={handleModal()} className={"btn btn-open"}/>
+        <input type="button" value="Încearcă o culoare!" onClick={handleModal()} className={"btn btn-open"}/>
         <div className={"overlay hidden"}></div>
       </div>
   );
