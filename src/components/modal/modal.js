@@ -5,11 +5,10 @@ import deeparWasm from '../../deepar/deepar.wasm';
 import segmentationModel from '../../deepar/segmentation-160x160-opt.bin';
 
 const Modal = (props) => {
-  let deepAR = null;
+  const [deepAR, setDeepAR] = useState(null);
   const [fullScreen, setFullScreen] = useState(false);
   // product color variations
   const colors = props.product.Variations;
-  // modal css interaction
   const overlay = document.querySelector(".overlay");
 
   // DeepAR API
@@ -18,7 +17,7 @@ const Modal = (props) => {
     const canvas = document.getElementById('deepar-canvas');
 
     return () => {
-      deepAR = new DeepAR({
+      let initializedDeepAR = new DeepAR({
         licenseKey: '6fda241c565744899d3ea574dc08a18ce3860d219aeb6de4b2d23437d7b6dcfcd79941dffe0e57f0',
         libPath: './lib',
         deeparWasmPath: deeparWasm,
@@ -28,40 +27,35 @@ const Modal = (props) => {
         },
         callbacks: {
           onInitialize: () => {
-            deepAR.startVideo(true);
+            setDeepAR(initializedDeepAR);
+            initializedDeepAR.startVideo(true);
           }
         }
       })
 
       /*@TODO: replace paths with server local path*/
-      deepAR.downloadFaceTrackingModel('../../deepar/models-68-extreme.bin');
+      initializedDeepAR.downloadFaceTrackingModel('../../deepar/models-68-extreme.bin');
     };
-  }, [deepAR]);
+  }, []);
 
   const handleModal = () => {
     overlay.classList.remove("hidden");
-    if (deepAR)
-      deepAR.stopVideo();
+    deepAR.stopVideo();
 
     return props.hideModal();
   };
 
-  // every time you click on a filter, it will call this function
-  const handleFilterClick = (selectedFilter) => {
-    let filter = selectedFilter.target.value.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
-
-    console.log(filter);
-    if (!filter) {
-      return;
-    }
-
-    /*@TODO: replace paths with server local path*/
-    /*@ERROR: deepAR not accesible from here??*/
-    deepAR.switchEffect(0, 'slot', '../../deepar/textures/' + filter + '.bin');
-  };
-
   const handleMouseEvent = (e) => {
     return e.preventDefault();
+  };
+
+  // every time you click on a filter, it will call this function
+  const handleFilterClick = (selectedFilter) => {
+    let filter = selectedFilter.target.value;
+
+    /*@TODO: replace paths with server local path*/
+    // deepAR.switchEffect(0, 'slot', '../../deepar/textures/' + filter.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0] + '.bin');
+    deepAR.switchEffect(0, 'slot', filter);
   };
 
   return (
