@@ -146,9 +146,5 @@
       "react-app"
     ]
   },
-  "proxy": "https://staging1.farmec.ro",
-
-  "devServer": {
-    "allowedHosts": "all"
-  }
+  "proxy": "https://staging1.farmec.ro"
 }
