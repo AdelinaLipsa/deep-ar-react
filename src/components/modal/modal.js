@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { DeepAR } from 'deepar';
 import deeparWasm from 'deepar/wasm/deepar.wasm';
 import segmentationModel from 'deepar/models/segmentation/segmentation-160x160-opt.bin';
@@ -9,10 +9,10 @@ const Modal = (props) => {
   const [fullScreen, setFullScreen] = useState(false);
   // product color variations
   const colors = props.product.Variations;
-  const overlay = document.querySelector(".overlay");
+  const overlay = useRef(document.querySelector(".overlay"));
 
   // DeepAR API
-  /*@TODO:change license key*/
+  /*@TODO:change license key in production, this is the free one*/
   useEffect(() => {
     const canvas = document.getElementById('deepar-canvas');
 
@@ -27,8 +27,7 @@ const Modal = (props) => {
         },
         callbacks: {
           onInitialize: () => {
-            // let filterName = colors[0].filterData[0]['Filter Binary Path'].match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
-
+            // let filterName = colors[0].filterData[0]['Filter Binary Path'].match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[1];
             setDeepAR(initializedDeepAR);
             initializedDeepAR.startVideo(true);
             // initializedDeepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
@@ -36,20 +35,15 @@ const Modal = (props) => {
         }
       })
 
-      /*@TODO: replace paths with server local path*/
       initializedDeepAR.downloadFaceTrackingModel(models);
     };
   }, []);
 
   const handleModal = () => {
-    overlay.classList.remove("hidden");
+    overlay.current.display = "block";
     deepAR.stopVideo();
 
     return props.hideModal();
-  };
-
-  const handleMouseEvent = (e) => {
-    return e.preventDefault();
   };
 
   // every time you click on a filter, it will call this function
@@ -59,6 +53,14 @@ const Modal = (props) => {
     let filterName = filter.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
 
     return deepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
+  };
+
+  const filterColor = (color) => {
+    return JSON.stringify(color.filterData[0]['Filter Binary Path'])
+  };
+
+  const filterPath = (filterBinaryPath) => {
+    return JSON.stringify(filterBinaryPath.filterData[0]['Filter Binary Path'])
   };
 
   return (
@@ -71,9 +73,8 @@ const Modal = (props) => {
             </div>
             <canvas className="deepar"
                     id="deepar-canvas"
-                    onContextMenu={(e) => handleMouseEvent(e)}
-                    width={fullScreen ? window.innerWidth + 'px' : '900px'}
-                    height={fullScreen ? window.innerHeight + 'px' : '600px'}
+                    width={fullScreen ? window.innerWidth + 'px' : '800px'}
+                    height={fullScreen ? window.innerHeight + 'px' : '500px'}
             ></canvas>
           </div>
           <div className={"buttons"}>
@@ -83,10 +84,10 @@ const Modal = (props) => {
                   <label
                     className="radio-button-label">
                     <input type="radio" name="color-choice"
-                           value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"
+                           value={filterPath(color)} className="sr-only"
                            onChange={handleFilterClick}/>
                     <div style={{
-                      backgroundColor: color.filterData[0]['Hex Color'],
+                      backgroundColor: filterColor(color),
                       width: '50px',
                       height: '50px',
                       cursor: "pointer",

@@ -1,16 +1,13 @@
-import Button from "./components/button/button";
-import CustomIframe from './components/iframe/customIframe';
 import Modal from "./components/modal/modal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import './App.scss';
 
 const App = () => {
-  let modal, randomProduct;
-
   const [products, setProducts] = useState([]);
   const [showFiltersModal, setFiltersModal] = useState(false);
+  const overlay = useRef(null);
 
-  /*@TODO:remove cors anywhere from the beginning of the URL*/
+  /*@TODO:remove this in production*/
   useEffect(() => {
     return () => {
       fetch('https://cors-anywhere.herokuapp.com/https://staging1.farmec.ro/rest/V1/farmec/deeparProducts/')
@@ -19,22 +16,21 @@ const App = () => {
     };
   }, []);
 
-  /*@TODO:remove this in production and give actual product in current shown page*/
-  if (products.length) {
-    randomProduct = Object.values(products[0])[0];
-  }
+  // this shows the deepar canvas on page
+  const handleModal = () => {
+    overlay.current.display = "hidden";
+    setFiltersModal(true);
+  };
 
-  if (showFiltersModal) {
-    modal = <Modal product={randomProduct} hideModal={()=>setFiltersModal(false)}/>;
-  }
+  /*@TODO:remove this in production and give the actual product shown in current shown page*/
+    let randomProduct = products.length ? Object.values(products[0])[0] : null;
 
   return (
-    <div>
-     {/*<CustomIframe className='custom-iframe'>*/}
-      <Button showModal={() => setFiltersModal(true)}/>
-      {modal}
-     {/*</CustomIframe>*/}
-    </div>
+    <>
+      {randomProduct ? <input type="button" value="Încearcă o culoare!" onClick={() => handleModal()} className={"btn btn-open"}/> : <></>}
+      <div className={"overlay hidden"} ref={overlay}></div>
+      {showFiltersModal ? <Modal product={randomProduct} hideModal={() => setFiltersModal(false)}/> : <div></div>}
+    </>
   );
 }
 
