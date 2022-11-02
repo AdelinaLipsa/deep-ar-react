@@ -145,5 +145,6 @@
     "presets": [
       "react-app"
     ]
-  }
+  },
+  "proxy": "https://staging1.farmec.ro"
 }

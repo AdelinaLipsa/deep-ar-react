@@ -10,7 +10,7 @@ const App = () => {
   /*@TODO:remove this in production*/
   useEffect(() => {
     return () => {
-      fetch('https://staging1.farmec.ro/rest/V1/farmec/deeparProducts/')
+      fetch('/rest/V1/farmec/deeparProducts/')
         .then(response => response.json())
         .then((productsJson) => setProducts(productsJson));
     };
