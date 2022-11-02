@@ -12,7 +12,7 @@ const Modal = (props) => {
   const overlay = useRef(document.querySelector(".overlay"));
 
   // DeepAR API
-  /*@TODO:change license key in production, this is the free one*/
+  /*@TODO:change license key, this is the free one*/
   useEffect(() => {
     const canvas = document.getElementById('deepar-canvas');
 
@@ -27,7 +27,7 @@ const Modal = (props) => {
         },
         callbacks: {
           onInitialize: () => {
-            // let filterName = colors[0].filterData[0]['Filter Binary Path'].match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[1];
+            // let filterName = colors[0].filterData[0]['Filter Binary Path'].match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
             setDeepAR(initializedDeepAR);
             initializedDeepAR.startVideo(true);
             // initializedDeepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
@@ -35,6 +35,7 @@ const Modal = (props) => {
         }
       })
 
+      /*@TODO: replace paths with server local path*/
       initializedDeepAR.downloadFaceTrackingModel(models);
     };
   }, []);
@@ -46,21 +47,13 @@ const Modal = (props) => {
     return props.hideModal();
   };
 
-  // every time you click on a filter, it will call this function
+  // every time you click on a filter, it will call this function to switch the effect
   const handleFilterClick = (selectedFilter) => {
     let filter = selectedFilter.target.value;
 
     let filterName = filter.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
 
     return deepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
-  };
-
-  const filterColor = (color) => {
-    return JSON.stringify(color.filterData[0]['Filter Binary Path'])
-  };
-
-  const filterPath = (filterBinaryPath) => {
-    return JSON.stringify(filterBinaryPath.filterData[0]['Filter Binary Path'])
   };
 
   return (
@@ -84,10 +77,10 @@ const Modal = (props) => {
                   <label
                     className="radio-button-label">
                     <input type="radio" name="color-choice"
-                           value={filterPath(color)} className="sr-only"
+                           value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"
                            onChange={handleFilterClick}/>
                     <div style={{
-                      backgroundColor: filterColor(color),
+                      backgroundColor: color.filterData[0]['Hex Color'],
                       width: '50px',
                       height: '50px',
                       cursor: "pointer",
