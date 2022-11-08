@@ -3,6 +3,7 @@ import { DeepAR } from 'deepar';
 import deeparWasm from 'deepar/wasm/deepar.wasm';
 import segmentationModel from 'deepar/models/segmentation/segmentation-160x160-opt.bin';
 import models from 'deepar/models/face/models-68-extreme.bin';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
 
 const Modal = (props) => {
   const [deepAR, setDeepAR] = useState(null);
@@ -71,9 +72,25 @@ const Modal = (props) => {
             ></canvas>
           </div>
           <div className={"buttons"}>
-            <div className={"colors-wrapper"}>
+            <Splide
+              options={{
+                perPage: 5,
+                height: '4rem',
+                rewind: true,
+                gap: "1rem"
+              }}
+              aria-labelledby="basic-example-heading"
+              onMoved={(splide, newIndex) => {
+                // eslint-disable-next-line
+                console.log('moved', newIndex);
+
+                // eslint-disable-next-line
+                console.log('length', splide.length);
+              }}
+              className={"colors-wrapper"}
+            >
               {colors.map((color, index) => {
-                return <div key={index} className={"colors"}>
+                return <SplideSlide key={index}>
                   <label
                     className="radio-button-label">
                     <input type="radio" name="color-choice"
@@ -87,9 +104,9 @@ const Modal = (props) => {
                       borderRadius: "100%"
                     }}/>
                   </label>
-                </div>
+                </SplideSlide>
               })}
-            </div>
+            </Splide>
             <button className={"fullscreen"} onClick={() => fullScreen ? setFullScreen(false) : setFullScreen(true)}>
               <svg height="50" viewBox="0 0 50 50" width="50" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 0h48v48h-48z" fill="none"/>
