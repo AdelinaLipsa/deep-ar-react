@@ -90,8 +90,8 @@ const Modal = (props) => {
   return (
     <section className={"modal"}>
       <div>
-        <div className={"modal-content-wrapper"}>
-          <div className={"canvas-wrapper"}>
+        <div>
+          <div>
             <div className={"btn-wrapper"}>
               <button className={"btn-close"} onClick={handleModal}>⨉</button>
             </div>
