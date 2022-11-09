@@ -61,7 +61,7 @@ body {
   padding: 0.3rem 0.7rem;
   border: none;
   cursor: pointer;
-  color:white;
+  color: white;
   position: absolute;
   margin-top: 10px;
   margin-right: 10px;
@@ -114,19 +114,18 @@ body {
 .colors-wrapper {
   width: 60%;
   margin-top: 10px;
-  display: inline-flex;
+  display: flex;
   justify-items: center;
-  align-items: flex-end;
   overflow: scroll;
 }
 
 .fullscreen {
-  background:transparent;
+  background: transparent;
   fill: white;
-  border:none;
+  border: none;
   margin-right: 10px;
-  
-  &:hover{
+
+  &:hover {
     cursor: pointer;
   }
 }
@@ -136,20 +135,30 @@ body {
   opacity: 0;
 }
 
-[type=radio]+img {
+[type=radio] + img {
   cursor: pointer;
   margin-right: 0.5rem;
+  margin-top: 5px;
 }
 
 [type=radio]:checked + img {
-  outline: 5px solid orange;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
 }
 
-.splide__arrow svg{
-  fill: #fff !important;
+.splide__arrow {
+  background: transparent !important;
+  opacity: 100 !important;
+
+  svg {
+    fill: white !important;
+  }
 }
 
-.splide__track{
+.splide__pagination {
+  display: none !important;
+}
+
+.splide__track {
   width: 80% !important;
   margin-right: auto;
   margin-left: auto;
