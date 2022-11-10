@@ -59,6 +59,7 @@ body {
 
 .btn-close {
   padding: 0.3rem 0.7rem;
+  opacity: .6;
   border: none;
   cursor: pointer;
   color: white;
@@ -98,9 +99,9 @@ body {
 }
 
 .buttons {
+  position: relative;
   display: flex;
   justify-content: space-between;
-  width: 90%;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -120,10 +121,14 @@ body {
 }
 
 .fullscreen {
+  position: absolute;
   background: transparent;
   fill: white;
+  opacity: .6;
   border: none;
-  margin-right: 10px;
+  top: 0;
+  margin-top: -5px;
+  margin-left: 5px;
 
   &:hover {
     cursor: pointer;
@@ -145,13 +150,23 @@ body {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
 }
 
+.splide{
+  overflow: hidden; /* Hide scrollbars */
+  width: 100%;
+}
+
 .splide__arrow {
   background: transparent !important;
-  opacity: 100 !important;
+  opacity: .6 !important;
 
   svg {
     fill: white !important;
+    margin-bottom: 10px !important;
   }
+}
+
+#splide01-list{
+  margin-left: 50px !important;
 }
 
 .splide__pagination {
@@ -159,7 +174,7 @@ body {
 }
 
 .splide__track {
-  width: 80% !important;
+  width: 100% !important;
   margin-right: auto;
   margin-left: auto;
 }

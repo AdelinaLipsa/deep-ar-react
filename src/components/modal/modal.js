@@ -90,67 +90,63 @@ const Modal = (props) => {
   return (
     <section className={"modal"}>
       <div>
-        <div>
-          <div>
-            <div className={"btn-wrapper"}>
-              <button className={"btn-close"} onClick={handleModal}>⨉</button>
-            </div>
-            <canvas className="deepar"
-                    id="deepar-canvas"
-                    width={fullScreen ? window.innerWidth + 'px' : '800px'}
-                    height={fullScreen ? window.innerHeight + 'px' : '500px'}
-            ></canvas>
-          </div>
-          <div className={"buttons"}>
-            <Splide
-              options={{
-                perPage: 5,
-                height: '4rem',
-                rewind: true,
-                gap: "1rem"
-              }}
-              aria-labelledby="basic-example-heading"
-              className={"colors-wrapper"}
-            >
-              {/*{colors.map((color, index) => {*/}
-              {/*  return <SplideSlide key={index}>*/}
-              {/*    <label*/}
-              {/*      className="radio-button-label">*/}
-              {/*      <input type="radio" name="color-choice"*/}
-              {/*             value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"*/}
-              {/*             onChange={handleFilterClick}/>*/}
-              {/*      <div style={{*/}
-              {/*        backgroundColor: color.filterData[0]['Hex Color'],*/}
-              {/*        width: '50px',*/}
-              {/*        height: '50px',*/}
-              {/*        cursor: "pointer",*/}
-              {/*        borderRadius: "100%"*/}
-              {/*      }}/>*/}
-              {/*    </label>*/}
-              {/*  </SplideSlide>*/}
-              {/*})}*/}
-              {product[0].models.map((color, index) => {
-                return( <SplideSlide key={index}>
-                  <label
-                    className="radio-button-label">
-                    <input type="radio" name="color-choice"
-                           value={color} className="sr-only"
-                           onChange={handleFilterClick}/>
-                    <img src={require(`.${color}.jpg`)}  style={{width :"50px", borderRadius: "100%" }} alt='alt'/>
-                  </label>
-                </SplideSlide>)
-              })}
-            </Splide>
-            <button className={"fullscreen"} onClick={() => fullScreen ? setFullScreen(false) : setFullScreen(true)}>
-              <svg height="50" viewBox="0 0 50 50" width="50" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h48v48h-48z" fill="none"/>
-                <path
-                  d="M14 28h-4v10h10v-4h-6v-6zm-4-8h4v-6h6v-4h-10v10zm24 14h-6v4h10v-10h-4v6zm-6-24v4h6v6h4v-10h-10z"/>
-              </svg>
-            </button>
-          </div>
+        <div className={"btn-wrapper"}>
+          <button className={"btn-close"} onClick={handleModal}>⨉</button>
+        </div>
+        <canvas className="deepar"
+                id="deepar-canvas"
+                width={fullScreen ? window.innerWidth + 'px' : '800px'}
+                height={fullScreen ? window.innerHeight + 'px' : '500px'}
+        ></canvas>
+        <div className={"buttons"}>
+          <Splide
+            options={{
+              perPage: fullScreen? 10 : 5,
+              height: '4rem',
+              rewind: true,
+              gap: "1rem"
+            }}
+            aria-labelledby="basic-example-heading"
+            className={"colors-wrapper"}
+          >
+            {/*{colors.map((color, index) => {*/}
+            {/*  return <SplideSlide key={index}>*/}
+            {/*    <label*/}
+            {/*      className="radio-button-label">*/}
+            {/*      <input type="radio" name="color-choice"*/}
+            {/*             value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"*/}
+            {/*             onChange={handleFilterClick}/>*/}
+            {/*      <div style={{*/}
+            {/*        backgroundColor: color.filterData[0]['Hex Color'],*/}
+            {/*        width: '50px',*/}
+            {/*        height: '50px',*/}
+            {/*        cursor: "pointer",*/}
+            {/*        borderRadius: "100%"*/}
+            {/*      }}/>*/}
+            {/*    </label>*/}
+            {/*  </SplideSlide>*/}
+            {/*})}*/}
+            {product[0].models.map((color, index) => {
+              return (<SplideSlide key={index}>
+                <label
+                  className="radio-button-label">
+                  <input type="radio" name="color-choice"
+                         value={color} className="sr-only"
+                         onChange={handleFilterClick}/>
+                  <img src={require(`.${color}.jpg`)} style={{ width: "50px", borderRadius: "100%" }} alt='alt'/>
+                </label>
+              </SplideSlide>)
+            })}
+          </Splide>
         </div>
       </div>
+      <button className={"fullscreen"} onClick={() => fullScreen ? setFullScreen(false) : setFullScreen(true)}>
+        <svg height="50" viewBox="0 0 50 50" width="25" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h48v48h-48z" fill="none"/>
+          <path
+            d="M14 28h-4v10h10v-4h-6v-6zm-4-8h4v-6h6v-4h-10v10zm24 14h-6v4h10v-10h-4v6zm-6-24v4h6v6h4v-10h-10z"/>
+        </svg>
+      </button>
     </section>
   );
 };
