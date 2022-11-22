@@ -101,7 +101,7 @@ const Modal = (props) => {
         <div className={"buttons"}>
           <Splide
             options={{
-              perPage: window.innerWidth < 600 ? 4: 10,
+              perPage: window.innerWidth < 600 ? 4: 7,
               height: '4rem',
               pauseOnFocus: false,
               dots:false,
