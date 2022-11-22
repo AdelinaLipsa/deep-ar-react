@@ -101,6 +101,7 @@ body {
 .buttons {
   position: relative;
   display: flex;
+  overflow-x: hidden;
   justify-content: space-between;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 16px;
@@ -112,6 +113,11 @@ body {
   margin-right: auto;
 }
 
+@media only screen and (max-width: 600px) {
+  .buttons {
+    width: 80%;
+  }
+}
 .colors-wrapper {
   width: 60%;
   margin-top: 10px;
@@ -169,5 +175,7 @@ body {
 }
 
 .splide__track {
-  width: 100% !important;
+  width: 80% !important;
+  margin-left: auto;
+  margin-right: auto;
 }

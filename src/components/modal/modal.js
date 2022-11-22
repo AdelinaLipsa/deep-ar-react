@@ -95,18 +95,18 @@ const Modal = (props) => {
         </div>
         <canvas className="deepar"
                 id="deepar-canvas"
-                width={fullScreen ? window.innerWidth + 'px' : '800px'}
-                height={fullScreen ? window.innerHeight + 'px' : '500px'}
+                width={window.innerWidth < 600 || fullScreen ? window.innerWidth + 'px' : '600px'}
+                height={fullScreen ? window.innerHeight + 'px' : '400px'}
         ></canvas>
         <div className={"buttons"}>
           <Splide
             options={{
-              perPage: fullScreen? 10 : 5,
+              perPage: window.innerWidth < 600 ? 4: 10,
               height: '4rem',
               pauseOnFocus: false,
               dots:false,
               rewind:true,
-              gap: "1rem"
+              gap: '1rem'
             }}
             aria-labelledby="basic-example-heading"
             className={"colors-wrapper"}
