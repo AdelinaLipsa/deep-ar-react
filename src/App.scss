@@ -113,11 +113,6 @@ body {
   margin-right: auto;
 }
 
-@media only screen and (max-width: 600px) {
-  .buttons {
-    width: 80%;
-  }
-}
 .colors-wrapper {
   width: 60%;
   margin-top: 10px;
@@ -178,4 +173,20 @@ body {
   width: 80% !important;
   margin-left: auto;
   margin-right: auto;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .buttons {
+    width: 80%;
+  }
+
+  .fullscreen {
+    margin-left: 35px;
+    margin-top: 5px;
+  }
+
+  .btn-close{
+    margin-right: 35px;
+  }
 }
