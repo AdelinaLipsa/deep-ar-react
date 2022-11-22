@@ -103,7 +103,9 @@ const Modal = (props) => {
             options={{
               perPage: fullScreen? 10 : 5,
               height: '4rem',
-              rewind: true,
+              pauseOnFocus: false,
+              dots:false,
+              rewind:true,
               gap: "1rem"
             }}
             aria-labelledby="basic-example-heading"
