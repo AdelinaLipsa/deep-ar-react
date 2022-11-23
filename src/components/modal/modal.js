@@ -10,33 +10,7 @@ const Modal = (props) => {
   const [fullScreen, setFullScreen] = useState(false);
 
   // product color variations
-  // const colors = props.product.Variations;
-  const product = [
-    {
-      id: 1,
-      name: "Ruj lichid",
-      price: '150lei',
-      info: "Ruj lichid cu rezistență îndelungată 8H este disponibil în 5 nuanțe.  Un ruj cu o textură remarcabilă care combină o culoare extrem de intensă cu o senzație ultra-soft,\ndar cu un efect optic imediat de volum. Atenţie! Setările monitorului (contrast, luminozitate, intensitate) pot influenţa nuanţa culorilor.",
-      imageSrc: "https://www.farmec.ro/media/catalog/product/cache/7fac84570d1a69c5b087ea5bb1fc1c3f/g/e/gerovital-beauty-2519-ruj-cremos-01-acid-hialuronic-2nd.jpg",
-      models: [
-        "/models/CB_01",
-        "/models/CB_02",
-        "/models/CB_03",
-        "/models/CB_04",
-        "/models/CB_05",
-        "/models/CB_06"
-      ],
-      textureImageSrc: [
-        "/textures/CB_01.jpg",
-        "/textures/CB_02.jpg",
-        "/textures/CB_03.jpg",
-        "/textures/CB_04.jpg",
-        "/textures/CB_05.jpg",
-        "/textures/CB_06.jpg",
-      ]
-    }
-  ];
-
+  const colors = props.product.filterData;
   const overlay = useRef(document.querySelector(".overlay"));
 
   // DeepAR API
@@ -55,15 +29,12 @@ const Modal = (props) => {
         },
         callbacks: {
           onInitialize: () => {
-            // let filterName = colors[0].filterData[0]['Filter Binary Path'].match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
             setDeepAR(initializedDeepAR);
             initializedDeepAR.startVideo(true);
-            // initializedDeepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
           }
         }
       })
 
-      /*@TODO: replace paths with server local path*/
       initializedDeepAR.downloadFaceTrackingModel(models);
     };
   }, []);
@@ -78,13 +49,9 @@ const Modal = (props) => {
   // every time you click on a filter, it will call this function to switch the effect
   const handleFilterClick = (selectedFilter) => {
     let filter = selectedFilter.target.value;
+    let filterName = filter.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
 
-    console.log(filter);
-    // let filterName = filter.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
-
-    return deepAR.switchEffect(0, 'slot', '.' + require(`.${filter}`));
-
-    // return deepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
+    return deepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
   };
 
   return (
@@ -111,33 +78,22 @@ const Modal = (props) => {
             aria-labelledby="basic-example-heading"
             className={"colors-wrapper"}
           >
-            {/*{colors.map((color, index) => {*/}
-            {/*  return <SplideSlide key={index}>*/}
-            {/*    <label*/}
-            {/*      className="radio-button-label">*/}
-            {/*      <input type="radio" name="color-choice"*/}
-            {/*             value={JSON.stringify(color.filterData[0]['Filter Binary Path'])} className="sr-only"*/}
-            {/*             onChange={handleFilterClick}/>*/}
-            {/*      <div style={{*/}
-            {/*        backgroundColor: color.filterData[0]['Hex Color'],*/}
-            {/*        width: '50px',*/}
-            {/*        height: '50px',*/}
-            {/*        cursor: "pointer",*/}
-            {/*        borderRadius: "100%"*/}
-            {/*      }}/>*/}
-            {/*    </label>*/}
-            {/*  </SplideSlide>*/}
-            {/*})}*/}
-            {product[0].models.map((color, index) => {
-              return (<SplideSlide key={index}>
+            {colors.map((color, index) => {
+              return <SplideSlide key={index}>
                 <label
                   className="radio-button-label">
                   <input type="radio" name="color-choice"
-                         value={color} className="sr-only"
+                         value={JSON.stringify(color['Filter Binary Path'])} className="sr-only"
                          onChange={handleFilterClick}/>
-                  <img src={require(`.${color}.jpg`)} style={{ width: "50px", borderRadius: "100%" }} alt='alt'/>
+                  <div style={{
+                    backgroundColor: color['Hex Color'],
+                    width: '50px',
+                    height: '50px',
+                    cursor: "pointer",
+                    borderRadius: "100%"
+                  }}/>
                 </label>
-              </SplideSlide>)
+              </SplideSlide>
             })}
           </Splide>
         </div>
