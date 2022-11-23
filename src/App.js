@@ -23,7 +23,7 @@ const App = () => {
   };
 
   /*@TODO:remove this in production and give the actual product shown in current shown page*/
-  let randomProduct = products.length ? Object.values(products[0])[11] : null;
+  let randomProduct = products.length ? Object.values(products[0])[0] : null;
 
   return (
     <>

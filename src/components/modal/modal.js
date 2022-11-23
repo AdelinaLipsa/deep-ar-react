@@ -51,7 +51,8 @@ const Modal = (props) => {
     let filter = selectedFilter.target.value;
     let filterName = filter.match(new RegExp("[^/]+(?=\\.[^/.]*$)"))[0];
 
-    return deepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
+    // @TODO: be careful here to change to correct path otherwise the filters won't switch
+    deepAR.switchEffect(0, 'slot', `https://staging1.farmec.ro/media/deepArFilters/${filterName}.bin`);
   };
 
   return (
